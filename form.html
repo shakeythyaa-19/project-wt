@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        #submitButton {
+            display: none;
+        }
+        #successMessage {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration">
+        <h1>Registration</h1>
+        <form id="registrationForm" action="submit_registration.php" method="post">
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" maxlength="20" required oninput="checkFormValidity()"><br><br>
+            
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" maxlength="20" required onkeydown="convertToUppercase()" oninput="checkFormValidity()"><br><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required oninput="checkFormValidity()"><br><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" minlength="7" required onmouseout="validatePassword()" oninput="checkFormValidity()"><br><br>
+            
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" maxlength="10" required oninput="checkFormValidity()"><br><br>
+            
+            <label for="gender">Gender:</label>
+            <input type="radio" id="male" name="gender" value="male" required onchange="checkFormValidity()">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female" required onchange="checkFormValidity()">
+            <label for="female">Female</label>
+            <input type="radio" id="other" name="gender" value="other" required onchange="checkFormValidity()">
+            <label for="other">Other</label><br><br>
+            
+            <label for="checkin">Check-in Date:</label>
+            <input type="date" id="checkin" name="checkin" required oninput="checkFormValidity()"><br><br>
+            
+            <label for="checkout">Check-out Date:</label>
+            <input type="date" id="checkout" name="checkout" required oninput="checkFormValidity()"><br><br>
+            
+            <label for="roomtype">Room Type:</label>
+            <select id="roomtype" name="roomtype" required onchange="checkFormValidity()">
+                <option value="">Select...</option>
+                <option value="single">Single</option>
+                <option value="double">Double</option>
+                <option value="suite">Suite</option>
+            </select><br><br>
+
+            <label for="qualification">Qualification:</label>
+            <input type="checkbox" id="diploma" name="qualification" value="diploma" onchange="toggleQualificationFields()">
+            <label for="diploma">Diploma</label>
+            <input type="checkbox" id="grade12" name="qualification" value="12th" onchange="toggleQualificationFields()">
+            <label for="grade12">12th Grade</label><br><br>
+            
+            <div id="diplomaFields" class="hidden">
+                <label for="diplomaPercentage">Diploma Percentage:</label>
+                <input type="number" id="diplomaPercentage" name="diplomaPercentage" min="0" max="100" step="0.01" oninput="checkFormValidity()"><br><br>
+            </div>
+
+            <div id="grade12Fields" class="hidden">
+                <label for="grade12Percentage">12th Grade Percentage:</label>
+                <input type="number" id="grade12Percentage" name="grade12Percentage" min="0" max="100" step="0.01" oninput="checkFormValidity()"><br><br>
+                <label for="grade12Cutoff">12th Grade Cutoff:</label>
+                <input type="number" id="grade12Cutoff" name="grade12Cutoff" min="0" max="200" step="0.01" oninput="checkFormValidity()"><br><br>
+            </div>
+            
+            <button type="submit" id="submitButton">SUBMIT</button>
+            <input type="reset" id="reset" value="Reset">
+            <input type="text" id="w" value="5" oninput="checkFormValidity()">
+        </form>
+    </div>
+    <div>
+        <input type="text" class="new" id="ID1" value="223" name="inputtype" oninput="checkFormValidity()">
+        <input type="text" class="new" id="ID2" value="191" oninput="checkFormValidity()">
+    </div>
+    <button onclick="this.innerHTML = Date()">The time is?</button>
+    <button onmouseover="showInputValue()">Show Input Value</button>
+    <p id="para" onclick="showParagraph()">WELCOME!!!</p>
+    
+    <p id="successMessage">Successfully Registered!</p>
+
+    <script>
+        function showInputValue() {
+            var d = document.querySelectorAll("input.new");
+            d.forEach(input => {
+                alert(input.value);
+            });
+        }
+
+        function convertToUppercase() {
+            var lnameInput = document.getElementById("lname");
+            lnameInput.value = lnameInput.value.toUpperCase();
+        }
+
+        function showParagraph() {
+            var p = document.getElementById("para").innerText;
+            alert(p);
+        }
+
+        function validatePassword() {
+            var password = document.getElementById("password").value;
+            var specialCharacterPattern = /[!@#$%^&*(),.?":{}|<>]/;
+            var uppercasePattern = /[A-Z]/;
+            var numberPattern = /[0-9]/;
+            if (!specialCharacterPattern.test(password)) {
+                alert("Password must contain at least one special character.");
+                return false;
+            }
+            if (!numberPattern.test(password)) {
+                alert("Password must contain at least one number.");
+                return false;
+            }
+            if (!uppercasePattern.test(password)) {
+                alert("Password must contain at least one uppercase letter.");
+                return false;
+            }
+            return true;
+        }
+
+        function isValidColor(color) {
+            var s = new Option().style;
+            s.color = color;
+            return s.color !== '';
+        }
+
+        function changeBackgroundColor(input) {
+            if (isValidColor(input.value)) {
+                input.style.backgroundColor = input.value;
+            } else {
+                input.style.backgroundColor = '';
+            }
+        }
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('input', function() {
+                changeBackgroundColor(this);
+            });
+        });
+
+        function checkFormValidity() {
+            var form = document.getElementById('registrationForm');
+            var submitButton = document.getElementById('submitButton');
+            submitButton.style.display = form.checkValidity() ? 'inline-block' : 'none';
+        }
+
+        document.getElementById('registrationForm').addEventListener('input', checkFormValidity);
+
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            var successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+        });
+
+        function toggleQualificationFields() {
+            var diplomaChecked = document.getElementById("diploma").checked;
+            var grade12Checked = document.getElementById("grade12").checked;
+
+            document.getElementById("diplomaFields").classList.toggle("hidden", !diplomaChecked);
+            document.getElementById("grade12Fields").classList.toggle("hidden", !grade12Checked);
+
+            checkFormValidity();
+        }
+    </script>
+</body>
+</html>
